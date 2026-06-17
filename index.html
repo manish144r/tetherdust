@@ -6,20 +6,24 @@
   <title>TetherDust — Self-Hosted AI Analytics Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #041414;
-      --primary: #00BFA5;
-      --accent: #00897B;
-      --dim: #004D40;
-      --text: #ffffff;
-      --text-muted: rgba(255,255,255,0.6);
-      --card-bg: rgba(0,191,165,0.08);
-      --card-border: rgba(0,191,165,0.2);
-      --glow: rgba(0,191,165,0.35);
+      --bg:          #FFFFFF;
+      --bg-alt:      #F1F5F9;
+      --bg-dark:     #0F172A;
+      --primary:     #2563EB;
+      --primary-dk:  #1D4ED8;
+      --accent:      #06B6D4;
+      --accent-lt:   #E0F2FE;
+      --text:        #0F172A;
+      --text-muted:  #64748B;
+      --border:      #E2E8F0;
+      --card-bg:     #FFFFFF;
+      --card-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+      --card-hover:  0 4px 24px rgba(37,99,235,0.12), 0 1px 6px rgba(0,0,0,0.08);
     }
 
     html { scroll-behavior: smooth; }
@@ -27,24 +31,25 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Inter', sans-serif;
       overflow-x: hidden;
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Canvas ── */
+    /* ── 3D Canvas ── */
     #bg-canvas {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
       z-index: 0;
       pointer-events: none;
+      opacity: 0.55;
     }
 
-    /* ── Page wrapper above canvas ── */
     .page-wrap { position: relative; z-index: 1; }
 
-    /* ════════════════ NAV ════════════════ */
+    /* ════ NAV ════ */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -53,40 +58,47 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 2.5rem;
-      height: 68px;
-      background: rgba(4,20,20,0.65);
+      height: 64px;
+      background: rgba(255,255,255,0.88);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--border);
     }
 
     .nav-logo {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
       text-decoration: none;
       color: var(--text);
     }
 
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
     .nav-logo-name {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: -0.02em;
+      color: var(--text);
     }
 
     .nav-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
-      background: rgba(0,191,165,0.15);
-      border: 1px solid var(--card-border);
+      gap: 0.3rem;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
       border-radius: 99px;
-      padding: 0.2rem 0.75rem;
-      font-size: 0.72rem;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.7rem;
       color: var(--primary);
-      font-weight: 500;
-      white-space: nowrap;
-      margin-left: 0.5rem;
+      font-weight: 600;
+      margin-left: 0.4rem;
     }
 
     .nav-links {
@@ -106,88 +118,68 @@
 
     .nav-links a:hover { color: var(--text); }
 
-    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-right { display: flex; align-items: center; gap: 0.75rem; }
 
-    /* ════════════════ BUTTONS ════════════════ */
-    .btn-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+    /* ════ BUTTONS ════ */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.4rem;
       background: var(--primary);
       color: #fff;
-      border: none;
-      border-radius: 99px;
+      border: none; border-radius: 8px;
       padding: 0.55rem 1.25rem;
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
+      font-family: inherit; font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
       transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
     }
-
-    .btn-pill:hover {
-      background: #00A896;
+    .btn-primary:hover {
+      background: var(--primary-dk);
       transform: translateY(-1px);
-      box-shadow: 0 4px 20px rgba(0,191,165,0.45);
+      box-shadow: 0 4px 16px rgba(37,99,235,0.35);
     }
 
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.45rem;
       background: transparent;
       color: var(--text);
-      border: 1px solid var(--card-border);
-      border-radius: 99px;
+      border: 1px solid var(--border); border-radius: 8px;
       padding: 0.55rem 1.25rem;
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
+      font-family: inherit; font-size: 0.88rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
       transition: border-color 0.2s, background 0.2s, transform 0.15s;
     }
-
-    .btn-outline:hover {
+    .btn-ghost:hover {
       border-color: var(--primary);
-      background: rgba(0,191,165,0.1);
+      color: var(--primary);
+      background: #EFF6FF;
       transform: translateY(-1px);
     }
 
-    .btn-lg { padding: 0.75rem 1.75rem; font-size: 1rem; }
+    .btn-lg { padding: 0.75rem 1.75rem; font-size: 1rem; border-radius: 10px; }
 
-    /* ════════════════ SHARED SECTION STYLES ════════════════ */
+    /* ════ LAYOUT ════ */
     section { position: relative; z-index: 1; }
-
-    .container {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 2rem; }
 
     .section-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--primary);
-      margin-bottom: 0.75rem;
-      display: block;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 3.5rem;
-    }
-
-    .section-header h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      border-radius: 99px;
+      padding: 0.25rem 0.8rem;
       margin-bottom: 1rem;
     }
 
+    .section-header { text-align: center; margin-bottom: 3.5rem; }
+    .section-header h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
     .section-header p {
       color: var(--text-muted);
       max-width: 520px;
@@ -195,20 +187,13 @@
       font-size: 1.05rem;
     }
 
-    .glow-divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--primary), transparent);
-      opacity: 0.3;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ════════════════ HERO ════════════════ */
+    /* ════ HERO ════ */
     #hero {
       min-height: 100vh;
       display: flex;
       align-items: center;
       padding: 120px 0 80px;
+      background: linear-gradient(180deg, #F8FAFF 0%, #FFFFFF 100%);
     }
 
     .hero-inner {
@@ -221,115 +206,124 @@
       text-align: center;
     }
 
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(0,191,165,0.12);
-      border: 1px solid var(--card-border);
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
       border-radius: 99px;
-      padding: 0.35rem 1rem;
-      font-size: 0.8rem;
+      padding: 0.35rem 1.1rem;
+      font-size: 0.82rem;
       color: var(--primary);
-      font-weight: 500;
+      font-weight: 600;
       margin-bottom: 2rem;
     }
 
-    .star-gold { color: #f4c430; }
+    .star-gold { color: #F59E0B; }
 
     h1.hero-title {
-      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
+      font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
       margin-bottom: 1.5rem;
-      background: linear-gradient(135deg, #00BFA5 0%, #4DB6AC 50%, #00897B 100%);
+      color: var(--text);
+    }
+
+    h1.hero-title span {
+      background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-size: clamp(1rem, 2vw, 1.15rem);
       color: var(--text-muted);
-      max-width: 640px;
+      max-width: 600px;
       margin-bottom: 2.5rem;
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
     .hero-ctas {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
+      display: flex; gap: 1rem; flex-wrap: wrap;
       justify-content: center;
       margin-bottom: 4rem;
     }
 
     /* ── Demo Panel ── */
     .demo-panel {
-      width: 100%;
-      max-width: 780px;
-      background: rgba(4,20,20,0.88);
-      border: 1px solid var(--card-border);
+      width: 100%; max-width: 800px;
+      background: var(--bg-dark);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 0 60px rgba(0,191,165,0.18), 0 24px 64px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 60px rgba(15,23,42,0.18), 0 4px 16px rgba(15,23,42,0.12);
+    }
+
+    .demo-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #EF4444; }
+    .dot-y { background: #F59E0B; }
+    .dot-g { background: #22C55E; }
+
+    .demo-titlebar-label {
+      font-size: 0.75rem; font-weight: 500;
+      color: rgba(255,255,255,0.35);
+      margin-left: 0.5rem;
     }
 
     .demo-tabs {
       display: flex;
-      border-bottom: 1px solid var(--card-border);
-      background: rgba(0,191,165,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
     .demo-tab {
-      padding: 0.75rem 1.5rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-muted);
+      padding: 0.7rem 1.4rem;
+      font-size: 0.82rem; font-weight: 500;
+      color: rgba(255,255,255,0.45);
       cursor: pointer;
       border-bottom: 2px solid transparent;
       transition: color 0.2s, border-color 0.2s;
       user-select: none;
       font-family: inherit;
+      background: none; border-top: none; border-left: none; border-right: none;
     }
 
-    .demo-tab.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-    }
+    .demo-tab.active { color: #06B6D4; border-bottom-color: #06B6D4; }
+    .demo-tab:hover:not(.active) { color: rgba(255,255,255,0.7); }
 
-    .demo-body { padding: 1.75rem; }
-
+    .demo-body { padding: 1.5rem; }
     .demo-pane { display: none; }
     .demo-pane.active { display: block; }
 
-    .demo-nl-label, .demo-sql-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
+    .demo-label {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
       margin-bottom: 0.6rem;
     }
 
     .demo-nl-box {
-      background: rgba(0,191,165,0.1);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 0.9rem 1.1rem;
-      font-size: 0.95rem;
-      color: var(--text);
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 1.1rem;
     }
 
     .cursor-blink {
-      display: inline-block;
-      width: 2px;
-      height: 1em;
-      background: var(--primary);
+      display: inline-block; width: 2px; height: 1em;
+      background: #06B6D4;
       margin-left: 2px;
       animation: blink 1s step-end infinite;
     }
@@ -337,144 +331,90 @@
     @keyframes blink { 50% { opacity: 0; } }
 
     .demo-arrow {
-      text-align: center;
-      color: var(--primary);
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
+      text-align: center; color: #06B6D4;
+      font-size: 0.8rem; font-weight: 500;
+      margin-bottom: 0.9rem;
+      letter-spacing: 0.05em;
     }
 
     .demo-code {
-      background: rgba(0,0,0,0.55);
-      border: 1px solid rgba(0,191,165,0.3);
-      border-radius: 10px;
-      padding: 1rem 1.2rem;
-      font-family: 'Courier New', monospace;
-      font-size: 0.82rem;
-      line-height: 1.7;
-      color: #e2e8f0;
-      overflow-x: auto;
-      white-space: pre;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8rem; line-height: 1.8;
+      color: #CBD5E1;
+      overflow-x: auto; white-space: pre;
     }
 
-    .sql-kw  { color: #4DB6AC; font-weight: 600; }
-    .sql-fn  { color: #67e8f9; }
-    .sql-str { color: #a7f3d0; }
-    .sql-cmt { color: #6b7280; font-style: italic; }
+    .sql-kw  { color: #93C5FD; font-weight: 600; }
+    .sql-fn  { color: #67E8F9; }
+    .sql-str { color: #86EFAC; }
+    .sql-cmt { color: #4B5563; font-style: italic; }
 
-    /* Results table inside demo */
-    .results-tbl {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-
+    .results-tbl { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
     .results-tbl th {
-      text-align: left;
-      padding: 0.5rem 0.75rem;
-      color: var(--primary);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--card-border);
+      text-align: left; padding: 0.5rem 0.75rem;
+      color: #06B6D4; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-
     .results-tbl td {
-      padding: 0.55rem 0.75rem;
-      color: var(--text-muted);
-      border-bottom: 1px solid rgba(0,191,165,0.07);
+      padding: 0.5rem 0.75rem;
+      color: rgba(255,255,255,0.6);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-
     .results-tbl tr:last-child td { border-bottom: none; }
-    .results-tbl td:last-child { color: var(--text); font-weight: 500; }
+    .results-tbl td:last-child { color: #fff; font-weight: 500; }
 
-    /* Mini CSS bar chart */
-    .chart-wrap {
-      padding: 0.5rem 0;
-    }
-
-    .chart-title-sm {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-bottom: 1.25rem;
-      text-align: center;
-    }
+    .chart-wrap { padding: 0.25rem 0; }
+    .chart-title-sm { font-size: 0.78rem; color: rgba(255,255,255,0.4); margin-bottom: 1.2rem; text-align: center; }
 
     .bar-chart-row {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      gap: 0.75rem;
-      height: 130px;
+      display: flex; align-items: flex-end;
+      justify-content: center; gap: 0.75rem; height: 130px;
     }
 
-    .bc {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      flex: 1;
-      min-width: 0;
-    }
-
-    .bc-val {
-      font-size: 0.68rem;
-      color: var(--primary);
-      font-weight: 600;
-    }
-
+    .bc { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; flex: 1; min-width: 0; }
+    .bc-val { font-size: 0.65rem; color: #06B6D4; font-weight: 600; }
     .bc-bar {
-      width: 100%;
-      border-radius: 5px 5px 0 0;
-      background: linear-gradient(180deg, #00BFA5 0%, #004D40 100%);
+      width: 100%; border-radius: 4px 4px 0 0;
+      background: linear-gradient(180deg, #2563EB 0%, #06B6D4 100%);
       animation: barRise 0.9s ease-out both;
     }
+    @keyframes barRise { from { transform: scaleY(0); transform-origin: bottom; } }
+    .bc-lbl { font-size: 0.65rem; color: rgba(255,255,255,0.4); }
 
-    @keyframes barRise {
-      from { transform: scaleY(0); transform-origin: bottom; }
-      to   { transform: scaleY(1); transform-origin: bottom; }
+    /* ════ SOCIAL PROOF STRIP ════ */
+    .stats-strip {
+      padding: 56px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: relative; z-index: 1;
     }
 
-    .bc-lbl {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-    }
-
-    /* ════════════════ COUNTERS ════════════════ */
-    .counter-section {
-      padding: 60px 0;
-      border-top: 1px solid var(--card-border);
-      border-bottom: 1px solid var(--card-border);
-      position: relative;
-      z-index: 1;
-    }
-
-    .counter-grid {
+    .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 2rem;
-      text-align: center;
+      gap: 2rem; text-align: center;
     }
 
-    .counter-num {
-      font-size: 2.2rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #00BFA5, #4DB6AC);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .stat-num {
+      font-size: 2.4rem; font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
-      display: block;
-      letter-spacing: -0.02em;
+      display: block; line-height: 1;
+      margin-bottom: 0.4rem;
     }
 
-    .counter-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-    }
+    .stat-desc { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
 
-    /* ════════════════ FEATURES ════════════════ */
-    #features { padding: 100px 0; }
+    /* ════ FEATURES ════ */
+    #features { padding: 96px 0; background: var(--bg-alt); }
 
     .features-grid {
       display: grid;
@@ -484,92 +424,106 @@
 
     .feature-card {
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 2rem;
-      transition: transform 0.25s, box-shadow 0.25s;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      transition: box-shadow 0.25s, transform 0.2s;
     }
 
     .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px var(--glow);
+      box-shadow: var(--card-hover);
+      transform: translateY(-2px);
     }
 
-    .feature-icon {
-      width: 48px; height: 48px;
-      background: rgba(0,191,165,0.15);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.25rem;
+    .feature-icon-wrap {
+      width: 44px; height: 44px;
+      background: #EFF6FF;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
     }
 
     .feature-card h3 {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 0.6rem;
+      font-size: 1rem; font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
     }
 
-    .feature-card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.65;
+    .feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; }
+
+    /* ════ HOW IT WORKS ════ */
+    #how { padding: 96px 0; }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
     }
 
-    /* ════════════════ COMPARISON TABLE ════════════════ */
-    #comparison { padding: 100px 0; }
-
-    .table-wrap {
-      overflow-x: auto;
-      border-radius: 16px;
-      border: 1px solid var(--card-border);
+    .step {
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: 1rem;
     }
+
+    .step-num {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; font-weight: 800; color: #fff;
+    }
+
+    .step h3 { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .step p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.65; }
+
+    /* ════ COMPARISON TABLE ════ */
+    #comparison { padding: 96px 0; background: var(--bg-alt); }
+
+    .table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); }
 
     .comp-table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 560px;
-    }
-
-    .comp-table thead tr {
-      background: rgba(0,191,165,0.18);
+      width: 100%; border-collapse: collapse;
+      font-size: 0.9rem;
     }
 
     .comp-table th {
-      padding: 1rem 1.5rem;
-      text-align: left;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--primary);
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem; font-weight: 700;
       letter-spacing: 0.04em;
+      color: var(--text-muted);
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-alt);
     }
 
-    .comp-table th:first-child { color: var(--text-muted); }
+    .comp-table th:first-child { color: var(--text); }
+
+    .comp-table th:nth-child(2) {
+      background: #EFF6FF;
+      color: var(--primary);
+    }
 
     .comp-table td {
-      padding: 0.95rem 1.5rem;
-      font-size: 0.9rem;
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
       color: var(--text-muted);
-      border-top: 1px solid rgba(0,191,165,0.07);
     }
 
-    .comp-table tr:nth-child(even) td {
-      background: rgba(0,191,165,0.04);
+    .comp-table tr:last-child td { border-bottom: none; }
+
+    .comp-table td:first-child { color: var(--text); font-weight: 500; }
+
+    .comp-table td:nth-child(2) {
+      background: #F8FAFF;
+      font-weight: 600;
     }
 
-    .comp-table td:first-child {
-      color: var(--text);
-      font-weight: 500;
-    }
+    .td-check { color: #16A34A; font-weight: 700; }
+    .td-cross { color: #DC2626; }
 
-    .td-check { color: #00BFA5; font-weight: 700; }
-    .td-cross { color: #9f3030; }
-
-    /* ════════════════ PRICING ════════════════ */
-    #pricing { padding: 100px 0; }
+    /* ════ PRICING ════ */
+    #pricing { padding: 96px 0; }
 
     .pricing-grid {
       display: grid;
@@ -579,130 +533,84 @@
     }
 
     .price-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 2rem 2rem 2.5rem;
-      transition: transform 0.25s, box-shadow 0.25s;
+      transition: box-shadow 0.25s;
       position: relative;
     }
 
-    .price-card:hover { transform: translateY(-4px); }
+    .price-card:hover { box-shadow: var(--card-hover); }
 
     .price-card.featured {
-      background: rgba(0,191,165,0.14);
       border-color: var(--primary);
-      box-shadow: 0 0 48px rgba(0,191,165,0.3), 0 8px 32px rgba(0,0,0,0.3);
+      border-width: 2px;
+      background: #F8FAFF;
     }
 
     .featured-badge {
-      position: absolute;
-      top: -13px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--primary);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 0.25rem 0.9rem;
-      border-radius: 99px;
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--primary); color: #fff;
+      font-size: 0.7rem; font-weight: 700;
+      padding: 0.2rem 0.85rem; border-radius: 99px;
+      letter-spacing: 0.05em;
       white-space: nowrap;
     }
 
-    .plan-name {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-    }
+    .plan-name { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
 
     .plan-price {
-      font-size: 2.4rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.25rem;
+      font-size: 2.4rem; font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      line-height: 1;
     }
 
-    .plan-price span {
-      font-size: 1rem;
-      font-weight: 400;
-      color: var(--text-muted);
-    }
+    .plan-price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); }
 
-    .plan-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 1.75rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--card-border);
-    }
+    .plan-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6; }
 
-    .plan-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.7rem;
-      margin-bottom: 2rem;
-    }
+    .plan-features { list-style: none; margin-bottom: 1.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
 
     .plan-features li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-      font-size: 0.9rem;
-      color: var(--text-muted);
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 0.88rem; color: var(--text);
     }
 
     .plan-features li::before {
-      content: "✓";
-      color: var(--primary);
-      font-weight: 700;
+      content: '✓';
+      width: 18px; height: 18px;
+      background: #DCFCE7; color: #16A34A;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 800;
       flex-shrink: 0;
     }
 
     .btn-plan {
-      display: block;
-      text-align: center;
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      display: block; width: 100%; text-align: center;
+      padding: 0.7rem 1.25rem;
+      border-radius: 8px;
+      font-family: inherit; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
     }
 
     .btn-plan-primary {
-      background: var(--primary);
-      color: #fff;
-      border: none;
+      background: var(--primary); color: #fff; border: none;
     }
-
-    .btn-plan-primary:hover {
-      background: #00A896;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 20px rgba(0,191,165,0.4);
-    }
+    .btn-plan-primary:hover { background: var(--primary-dk); transform: translateY(-1px); }
 
     .btn-plan-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--card-border);
+      background: transparent; color: var(--primary);
+      border: 1px solid var(--primary);
     }
+    .btn-plan-secondary:hover { background: #EFF6FF; transform: translateY(-1px); }
 
-    .btn-plan-secondary:hover {
-      border-color: var(--primary);
-      background: rgba(0,191,165,0.1);
-    }
-
-    /* ════════════════ TESTIMONIALS ════════════════ */
-    #testimonials { padding: 100px 0; }
+    /* ════ TESTIMONIALS ════ */
+    #testimonials { padding: 96px 0; background: var(--bg-alt); }
 
     .testi-grid {
       display: grid;
@@ -712,231 +620,199 @@
 
     .testi-card {
       background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 2rem;
-      transition: transform 0.25s, box-shadow 0.25s;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      transition: box-shadow 0.25s, transform 0.2s;
     }
 
     .testi-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px var(--glow);
+      box-shadow: var(--card-hover);
+      transform: translateY(-2px);
     }
 
-    .testi-stars {
-      color: #f4c430;
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-    }
+    .testi-stars { color: #F59E0B; font-size: 0.85rem; margin-bottom: 1rem; letter-spacing: 0.05em; }
 
     .testi-quote {
-      font-size: 0.95rem;
+      font-size: 0.95rem; line-height: 1.7;
       color: var(--text);
-      line-height: 1.7;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       font-style: italic;
     }
 
-    .testi-author {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
+    .testi-author { display: flex; align-items: center; gap: 0.75rem; }
 
     .testi-avatar {
-      width: 40px; height: 40px;
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--dim));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: #fff;
       flex-shrink: 0;
     }
 
-    .testi-name {
-      font-size: 0.9rem;
-      font-weight: 600;
+    .testi-name { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+    .testi-role { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ════ CTA DARK ════ */
+    #cta-section {
+      padding: 96px 0;
+      background: var(--bg-dark);
+      position: relative; overflow: hidden;
     }
 
-    .testi-role {
-      font-size: 0.78rem;
-      color: var(--text-muted);
+    #cta-section::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(37,99,235,0.2) 0%, transparent 70%);
+      pointer-events: none;
     }
-
-    /* ════════════════ CTA SECTION ════════════════ */
-    #cta-section { padding: 100px 0; }
 
     .cta-inner {
       text-align: center;
-      max-width: 700px;
-      margin: 0 auto;
+      position: relative; z-index: 1;
     }
 
     .cta-inner h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 1rem;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800; letter-spacing: -0.03em;
+      color: #fff; margin-bottom: 1rem;
     }
 
-    .cta-inner p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      margin-bottom: 2rem;
+    .cta-inner > p {
+      color: rgba(255,255,255,0.55); font-size: 1.05rem;
+      margin-bottom: 2.5rem;
     }
 
     .docker-card {
-      background: rgba(0,0,0,0.55);
-      border: 1px solid var(--primary);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
       padding: 1.25rem 1.5rem;
+      max-width: 600px; margin: 0 auto 2.5rem;
       text-align: left;
-      margin-bottom: 2rem;
-      box-shadow: 0 0 30px rgba(0,191,165,0.2);
     }
 
     .docker-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 0.6rem;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 0.75rem;
     }
 
     .docker-code {
-      font-family: 'Courier New', monospace;
-      font-size: 0.85rem;
-      color: #e2e8f0;
-      word-break: break-all;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem; color: rgba(255,255,255,0.85);
       line-height: 1.6;
     }
 
-    .docker-code .kw  { color: #4DB6AC; }
-    .docker-code .fl  { color: #67e8f9; }
-    .docker-code .vl  { color: #a7f3d0; }
+    .kw  { color: #93C5FD; font-weight: 600; }
+    .fl  { color: #67E8F9; }
+    .vl  { color: #86EFAC; }
 
-    .cta-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    .btn-cta-primary {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--primary); color: #fff;
+      border: none; border-radius: 10px;
+      padding: 0.75rem 1.75rem;
+      font-family: inherit; font-size: 1rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-cta-primary:hover {
+      background: var(--primary-dk);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(37,99,235,0.4);
     }
 
-    /* ════════════════ FOOTER ════════════════ */
+    .btn-cta-ghost {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: transparent; color: rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+      padding: 0.75rem 1.75rem;
+      font-family: inherit; font-size: 1rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+    .btn-cta-ghost:hover {
+      border-color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-1px);
+    }
+
+    /* ════ FOOTER ════ */
     footer {
-      position: relative;
-      z-index: 1;
-      border-top: 1px solid var(--card-border);
-      padding: 4rem 0 2rem;
+      background: var(--bg-dark);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 56px 0 32px;
     }
 
     .footer-top {
       display: grid;
-      grid-template-columns: 1.5fr repeat(4, 1fr);
+      grid-template-columns: 2fr repeat(4, 1fr);
       gap: 3rem;
       margin-bottom: 3rem;
     }
 
-    .footer-brand p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      max-width: 220px;
-      line-height: 1.65;
-      margin-top: 0.75rem;
-    }
+    .footer-brand p { font-size: 0.88rem; color: rgba(255,255,255,0.4); margin-top: 0.75rem; line-height: 1.65; }
 
     .footer-brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+      display: flex; align-items: center; gap: 0.6rem;
       text-decoration: none;
-      color: var(--text);
     }
 
-    .footer-brand-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
+    .footer-brand-name { font-size: 1rem; font-weight: 700; color: #fff; }
 
     .footer-col h4 {
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--primary);
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
       margin-bottom: 1rem;
     }
 
-    .footer-col ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
 
-    .footer-col ul a {
-      font-size: 0.88rem;
-      color: var(--text-muted);
+    .footer-col ul li a {
+      font-size: 0.88rem; color: rgba(255,255,255,0.55);
       text-decoration: none;
       transition: color 0.2s;
     }
-
-    .footer-col ul a:hover { color: var(--text); }
+    .footer-col ul li a:hover { color: #fff; }
 
     .footer-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--card-border);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
     }
 
-    .footer-bottom p {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
+    .footer-bottom p { font-size: 0.82rem; color: rgba(255,255,255,0.3); }
 
     .gh-stars {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(0,191,165,0.12);
-      border: 1px solid var(--card-border);
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 99px;
       padding: 0.3rem 0.85rem;
-      font-size: 0.8rem;
-      color: var(--primary);
-      font-weight: 600;
-      text-decoration: none;
+      font-size: 0.8rem; color: rgba(255,255,255,0.7);
+      font-weight: 600; text-decoration: none;
       transition: background 0.2s;
     }
+    .gh-stars:hover { background: rgba(255,255,255,0.1); }
 
-    .gh-stars:hover { background: rgba(0,191,165,0.22); }
-
-    /* ════════════════ SCROLLBAR ════════════════ */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 99px; }
-
-    /* ════════════════ RESPONSIVE ════════════════ */
+    /* ════ RESPONSIVE ════ */
     @media (max-width: 960px) {
       .footer-top { grid-template-columns: 1fr 1fr; }
     }
-
     @media (max-width: 720px) {
       nav { padding: 0 1.25rem; }
       .nav-links { display: none; }
       .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
-      .footer-bottom { flex-direction: column; text-align: center; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 1rem; }
     }
-
     @media (max-width: 480px) {
       .footer-top { grid-template-columns: 1fr; }
       .hero-ctas, .cta-buttons { flex-direction: column; align-items: center; }
@@ -945,54 +821,58 @@
 </head>
 <body>
 
-<!-- ═══════════════ THREE.JS CANVAS ═══════════════ -->
+<!-- ═══ THREE.JS CANVAS ═══ -->
 <canvas id="bg-canvas"></canvas>
 
 <div class="page-wrap">
 
-<!-- ═══════════════ NAV ═══════════════ -->
+<!-- ═══ NAV ═══ -->
 <nav>
   <a href="#" class="nav-logo">
-    <!-- Purple diamond icon -->
-    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M15 2L28 9.5V20.5L15 28L2 20.5V9.5L15 2Z" fill="rgba(0,191,165,0.2)" stroke="#00BFA5" stroke-width="1.5"/>
-      <path d="M15 7L23 11.5V18.5L15 23L7 18.5V11.5L15 7Z" fill="rgba(0,191,165,0.3)" stroke="#00BFA5" stroke-width="1"/>
-      <circle cx="15" cy="15" r="3" fill="#00BFA5"/>
-    </svg>
+    <div class="nav-logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L20 7V17L12 22L4 17V7L12 2Z" fill="rgba(255,255,255,0.9)" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+        <circle cx="12" cy="12" r="3" fill="white" opacity="0.9"/>
+        <line x1="12" y1="2" x2="12" y2="9" stroke="white" stroke-width="1" opacity="0.5"/>
+        <line x1="12" y1="15" x2="12" y2="22" stroke="white" stroke-width="1" opacity="0.5"/>
+      </svg>
+    </div>
     <span class="nav-logo-name">TetherDust</span>
-    <span class="nav-badge"><span class="star-gold">★</span> Open Source · MIT · 4.2k</span>
+    <span class="nav-badge"><span class="star-gold">★</span> MIT · 4.2k</span>
   </a>
 
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
+    <li><a href="#comparison">Compare</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#">Docs</a></li>
     <li><a href="#">GitHub</a></li>
   </ul>
 
   <div class="nav-right">
-    <a href="#" class="btn-pill">Try Free →</a>
+    <a href="#" class="btn-ghost">Sign In</a>
+    <a href="#cta-section" class="btn-primary">Get Started →</a>
   </div>
 </nav>
 
-<!-- ═══════════════ HERO ═══════════════ -->
+<!-- ═══ HERO ═══ -->
 <section id="hero">
   <div class="hero-inner">
 
-    <div class="hero-badge">
+    <div class="hero-eyebrow">
       <span class="star-gold">★</span>
       Open Source · MIT License · 4.2k GitHub Stars
     </div>
 
-    <h1 class="hero-title">Your Self-Hosted AI<br>Analytics Engineer</h1>
+    <h1 class="hero-title">Your Self-Hosted<br><span>AI Analytics Engineer</span></h1>
 
     <p class="hero-sub">
       Ask your data questions in plain English. TetherDust writes the SQL, runs the query, and renders the chart — all inside your own infrastructure. Zero data leaves your servers.
     </p>
 
     <div class="hero-ctas">
-      <a href="#cta-section" class="btn-pill btn-lg">Deploy in 5 Minutes →</a>
-      <a href="#" class="btn-outline btn-lg">
+      <a href="#cta-section" class="btn-primary btn-lg">Deploy in 5 Minutes →</a>
+      <a href="#" class="btn-ghost btn-lg">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
         View on GitHub
       </a>
@@ -1000,6 +880,12 @@
 
     <!-- Demo Panel -->
     <div class="demo-panel">
+      <div class="demo-titlebar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="demo-titlebar-label">TetherDust — Query Interface</span>
+      </div>
       <div class="demo-tabs">
         <button class="demo-tab active" onclick="switchTab(this,'pane-query')">Query</button>
         <button class="demo-tab" onclick="switchTab(this,'pane-results')">Results</button>
@@ -1007,14 +893,13 @@
       </div>
       <div class="demo-body">
 
-        <!-- Query Pane -->
         <div class="demo-pane active" id="pane-query">
-          <div class="demo-nl-label">Natural Language Input</div>
+          <div class="demo-label">Natural Language Input</div>
           <div class="demo-nl-box">
             What was our MRR last 6 months broken down by plan?<span class="cursor-blink"></span>
           </div>
           <div class="demo-arrow">↓ Generated SQL</div>
-          <div class="demo-sql-label">Executed Query</div>
+          <div class="demo-label">Executed Query</div>
           <div class="demo-code"><span class="sql-cmt">-- TetherDust: MRR by plan, last 6 months</span>
 <span class="sql-kw">SELECT</span>
   <span class="sql-fn">DATE_TRUNC</span>(<span class="sql-str">'month'</span>, s.created_at)  <span class="sql-kw">AS</span> month,
@@ -1028,16 +913,9 @@
 <span class="sql-kw">ORDER BY</span> 1 <span class="sql-kw">ASC</span>, mrr <span class="sql-kw">DESC</span>;</div>
         </div>
 
-        <!-- Results Pane -->
         <div class="demo-pane" id="pane-results">
           <table class="results-tbl">
-            <thead>
-              <tr>
-                <th>Month</th>
-                <th>Plan</th>
-                <th>MRR ($)</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Month</th><th>Plan</th><th>MRR ($)</th></tr></thead>
             <tbody>
               <tr><td>Jan 2024</td><td>Team</td><td>$18,420</td></tr>
               <tr><td>Jan 2024</td><td>Starter</td><td>$6,240</td></tr>
@@ -1049,7 +927,6 @@
           </table>
         </div>
 
-        <!-- Chart Pane -->
         <div class="demo-pane" id="pane-chart">
           <div class="chart-wrap">
             <div class="chart-title-sm">MRR by Month (Jan – Jun 2024)</div>
@@ -1059,38 +936,35 @@
 
       </div>
     </div>
+
   </div>
 </section>
 
-<div class="glow-divider"></div>
-
-<!-- ═══════════════ COUNTERS ═══════════════ -->
-<section class="counter-section">
+<!-- ═══ STATS STRIP ═══ -->
+<section class="stats-strip">
   <div class="container">
-    <div class="counter-grid">
+    <div class="stats-grid">
       <div>
-        <span class="counter-num" data-target="4200" data-suffix="★">0★</span>
-        <div class="counter-desc">GitHub Stars</div>
+        <span class="stat-num" data-target="4200" data-suffix="★">0★</span>
+        <div class="stat-desc">GitHub Stars</div>
       </div>
       <div>
-        <span class="counter-num" data-target="6" data-suffix="">0</span>
-        <div class="counter-desc">Data Connectors</div>
+        <span class="stat-num" data-target="6" data-suffix="">0</span>
+        <div class="stat-desc">Data Connectors</div>
       </div>
       <div>
-        <span class="counter-num" data-target="5" data-suffix=" min">0 min</span>
-        <div class="counter-desc">Deploy Time</div>
+        <span class="stat-num" data-target="5" data-suffix=" min">0 min</span>
+        <div class="stat-desc">Deploy Time</div>
       </div>
       <div>
-        <span class="counter-num" data-target="0" data-suffix="">$0</span>
-        <div class="counter-desc">Self-Hosted Cost — Forever</div>
+        <span class="stat-num" data-target="0" data-suffix="">$0</span>
+        <div class="stat-desc">Self-Hosted Cost — Forever</div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="glow-divider"></div>
-
-<!-- ═══════════════ FEATURES ═══════════════ -->
+<!-- ═══ FEATURES ═══ -->
 <section id="features">
   <div class="container">
     <div class="section-header">
@@ -1099,38 +973,64 @@
       <p>Everything your data team needs, running entirely inside your own infrastructure.</p>
     </div>
     <div class="features-grid">
-
       <div class="feature-card">
-        <div class="feature-icon">🧠</div>
+        <div class="feature-icon-wrap">🧠</div>
         <h3>Natural Language → SQL</h3>
         <p>Type any question. TetherDust generates production-grade SQL, explains its reasoning, and executes it against your database.</p>
       </div>
-
       <div class="feature-card">
-        <div class="feature-icon">🔌</div>
+        <div class="feature-icon-wrap">🔌</div>
         <h3>6 Data Source Connectors</h3>
         <p>PostgreSQL, MySQL, BigQuery, Snowflake, Redshift, ClickHouse. New connectors ship monthly based on community demand.</p>
       </div>
-
       <div class="feature-card">
-        <div class="feature-icon">📊</div>
+        <div class="feature-icon-wrap">📊</div>
         <h3>Auto-Generated Charts</h3>
         <p>Results become charts automatically. Bar, line, pie, scatter — TetherDust picks the right visualization for your data shape.</p>
       </div>
-
       <div class="feature-card">
-        <div class="feature-icon">🔒</div>
+        <div class="feature-icon-wrap">🔒</div>
         <h3>Zero Data Leaves Your Infra</h3>
         <p>Self-hosted means your data never touches our servers. GDPR-friendly by architecture, not just by policy promise.</p>
       </div>
-
     </div>
   </div>
 </section>
 
-<div class="glow-divider"></div>
+<!-- ═══ HOW IT WORKS ═══ -->
+<section id="how">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">How It Works</span>
+      <h2>From Question to Insight in Seconds</h2>
+      <p>TetherDust sits inside your infrastructure and handles everything automatically.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Connect Your Database</h3>
+        <p>One environment variable. PostgreSQL, MySQL, BigQuery, Snowflake, Redshift, or ClickHouse — all supported out of the box.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Ask in Plain English</h3>
+        <p>Type your question naturally. "What's our churn rate by cohort?" "Show me top 10 customers by revenue last quarter."</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>AI Generates the SQL</h3>
+        <p>TetherDust's AI engine writes precise SQL, explains its logic, flags edge cases, and optimizes for performance automatically.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>See Results Instantly</h3>
+        <p>Query runs, results render as a table or chart. Export to CSV, share a link, or embed in your dashboard — your call.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<!-- ═══════════════ COMPARISON ═══════════════ -->
+<!-- ═══ COMPARISON ═══ -->
 <section id="comparison">
   <div class="container">
     <div class="section-header">
@@ -1149,45 +1049,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Starting Price</td>
-            <td><span class="td-check">$0 (self-hosted)</span></td>
-            <td>$75/user/mo</td>
-            <td>$9,000/yr</td>
-          </tr>
-          <tr>
-            <td>Self-Hosted</td>
-            <td><span class="td-check">✓ Yes</span></td>
-            <td><span class="td-cross">✗ No</span></td>
-            <td><span class="td-cross">✗ No</span></td>
-          </tr>
-          <tr>
-            <td>AI-Native Querying</td>
-            <td><span class="td-check">✓ Yes</span></td>
-            <td><span class="td-cross">✗ No</span></td>
-            <td>Limited</td>
-          </tr>
-          <tr>
-            <td>Setup Time</td>
-            <td><span class="td-check">&lt; 5 min</span></td>
-            <td>Days</td>
-            <td>Weeks</td>
-          </tr>
-          <tr>
-            <td>Open Source</td>
-            <td><span class="td-check">✓ Yes</span></td>
-            <td><span class="td-cross">✗ No</span></td>
-            <td><span class="td-cross">✗ No</span></td>
-          </tr>
+          <tr><td>Starting Price</td><td><span class="td-check">$0 (self-hosted)</span></td><td>$75/user/mo</td><td>$9,000/yr</td></tr>
+          <tr><td>Self-Hosted</td><td><span class="td-check">✓ Yes</span></td><td><span class="td-cross">✗ No</span></td><td><span class="td-cross">✗ No</span></td></tr>
+          <tr><td>AI-Native Querying</td><td><span class="td-check">✓ Yes</span></td><td><span class="td-cross">✗ No</span></td><td>Limited</td></tr>
+          <tr><td>Setup Time</td><td><span class="td-check">&lt; 5 min</span></td><td>Days</td><td>Weeks</td></tr>
+          <tr><td>Open Source</td><td><span class="td-check">✓ Yes</span></td><td><span class="td-cross">✗ No</span></td><td><span class="td-cross">✗ No</span></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </section>
 
-<div class="glow-divider"></div>
-
-<!-- ═══════════════ PRICING ═══════════════ -->
+<!-- ═══ PRICING ═══ -->
 <section id="pricing">
   <div class="container">
     <div class="section-header">
@@ -1197,7 +1070,6 @@
     </div>
     <div class="pricing-grid">
 
-      <!-- Self-Hosted -->
       <div class="price-card">
         <div class="plan-name">Self-Hosted</div>
         <div class="plan-price">$0<span> / forever</span></div>
@@ -1211,7 +1083,6 @@
         <a href="#" class="btn-plan btn-plan-secondary">Deploy Free →</a>
       </div>
 
-      <!-- Cloud Starter (featured) -->
       <div class="price-card featured">
         <div class="featured-badge">Most Popular</div>
         <div class="plan-name">Cloud Starter</div>
@@ -1226,7 +1097,6 @@
         <a href="#" class="btn-plan btn-plan-primary">Start Free Trial →</a>
       </div>
 
-      <!-- Enterprise -->
       <div class="price-card">
         <div class="plan-name">Team / Enterprise</div>
         <div class="plan-price">$199<span> / mo</span></div>
@@ -1245,9 +1115,7 @@
   </div>
 </section>
 
-<div class="glow-divider"></div>
-
-<!-- ═══════════════ TESTIMONIALS ═══════════════ -->
+<!-- ═══ TESTIMONIALS ═══ -->
 <section id="testimonials">
   <div class="container">
     <div class="section-header">
@@ -1256,7 +1124,6 @@
       <p>From startups to scale-ups, teams are replacing expensive BI tools with TetherDust.</p>
     </div>
     <div class="testi-grid">
-
       <div class="testi-card">
         <div class="testi-stars">★★★★★</div>
         <p class="testi-quote">"TetherDust replaced a $40k/yr Looker contract. My junior analyst now queries data like a senior engineer."</p>
@@ -1268,7 +1135,6 @@
           </div>
         </div>
       </div>
-
       <div class="testi-card">
         <div class="testi-stars">★★★★★</div>
         <p class="testi-quote">"We deployed it in 4 minutes. Literally. It just works. Our investors were shocked at our demo."</p>
@@ -1280,7 +1146,6 @@
           </div>
         </div>
       </div>
-
       <div class="testi-card">
         <div class="testi-stars">★★★★★</div>
         <p class="testi-quote">"The NL→SQL quality is better than anything I've seen, including paid tools. And it runs on my own Postgres."</p>
@@ -1292,34 +1157,26 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<div class="glow-divider"></div>
-
-<!-- ═══════════════ CTA SECTION ═══════════════ -->
+<!-- ═══ CTA DARK ═══ -->
 <section id="cta-section">
   <div class="container">
     <div class="cta-inner">
-      <span class="section-label" style="display:block;text-align:center;">Get Started</span>
+      <span class="section-label" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">Get Started</span>
       <h2>Self-Hosted AI Analytics<br>in Under 5 Minutes</h2>
       <p>One Docker command. Your data stays yours.</p>
 
       <div class="docker-card">
         <div class="docker-label">Terminal</div>
-        <div class="docker-code">
-          <span class="kw">docker</span> run
-          <span class="fl"> -p</span> <span class="vl">3000:3000</span>
-          <span class="fl"> -e</span> <span class="vl">DATABASE_URL=postgres://user:pass@host:5432/mydb</span>
-          <span class="kw"> tetherdust</span><span class="vl">/app:latest</span>
-        </div>
+        <div class="docker-code"><span class="kw">docker</span> run<span class="fl"> -p</span> <span class="vl">3000:3000</span><span class="fl"> -e</span> <span class="vl">DATABASE_URL=postgres://user:pass@host:5432/mydb</span><span class="kw"> tetherdust</span><span class="vl">/app:latest</span></div>
       </div>
 
       <div class="cta-buttons">
-        <a href="#" class="btn-pill btn-lg">Deploy TetherDust →</a>
-        <a href="#" class="btn-outline btn-lg">
+        <a href="#" class="btn-cta-primary">Deploy TetherDust →</a>
+        <a href="#" class="btn-cta-ghost">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
           View on GitHub
         </a>
@@ -1328,66 +1185,27 @@
   </div>
 </section>
 
-<!-- ═══════════════ FOOTER ═══════════════ -->
+<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="container">
     <div class="footer-top">
-
       <div class="footer-brand">
         <a href="#" class="footer-brand-logo">
-          <svg width="26" height="26" viewBox="0 0 30 30" fill="none">
-            <path d="M15 2L28 9.5V20.5L15 28L2 20.5V9.5L15 2Z" fill="rgba(0,191,165,0.2)" stroke="#00BFA5" stroke-width="1.5"/>
-            <path d="M15 7L23 11.5V18.5L15 23L7 18.5V11.5L15 7Z" fill="rgba(0,191,165,0.3)" stroke="#00BFA5" stroke-width="1"/>
-            <circle cx="15" cy="15" r="3" fill="#00BFA5"/>
-          </svg>
+          <div class="nav-logo-icon" style="width:28px;height:28px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L20 7V17L12 22L4 17V7L12 2Z" fill="rgba(255,255,255,0.9)"/>
+              <circle cx="12" cy="12" r="3" fill="#1E40AF"/>
+            </svg>
+          </div>
           <span class="footer-brand-name">TetherDust</span>
         </a>
         <p>Open source AI analytics engineer. Ask questions, get answers, own your data.</p>
       </div>
-
-      <div class="footer-col">
-        <h4>Product</h4>
-        <ul>
-          <li><a href="#">Features</a></li>
-          <li><a href="#">Pricing</a></li>
-          <li><a href="#">Changelog</a></li>
-          <li><a href="#">Roadmap</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Data Sources</h4>
-        <ul>
-          <li><a href="#">PostgreSQL</a></li>
-          <li><a href="#">MySQL</a></li>
-          <li><a href="#">BigQuery</a></li>
-          <li><a href="#">Snowflake</a></li>
-          <li><a href="#">ClickHouse</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Resources</h4>
-        <ul>
-          <li><a href="#">Documentation</a></li>
-          <li><a href="#">API Reference</a></li>
-          <li><a href="#">Tutorials</a></li>
-          <li><a href="#">Blog</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <h4>Community</h4>
-        <ul>
-          <li><a href="#">GitHub</a></li>
-          <li><a href="#">Discord</a></li>
-          <li><a href="#">Twitter / X</a></li>
-          <li><a href="#">Contributing</a></li>
-        </ul>
-      </div>
-
+      <div class="footer-col"><h4>Product</h4><ul><li><a href="#">Features</a></li><li><a href="#">Pricing</a></li><li><a href="#">Changelog</a></li><li><a href="#">Roadmap</a></li></ul></div>
+      <div class="footer-col"><h4>Data Sources</h4><ul><li><a href="#">PostgreSQL</a></li><li><a href="#">MySQL</a></li><li><a href="#">BigQuery</a></li><li><a href="#">Snowflake</a></li><li><a href="#">ClickHouse</a></li></ul></div>
+      <div class="footer-col"><h4>Resources</h4><ul><li><a href="#">Documentation</a></li><li><a href="#">API Reference</a></li><li><a href="#">Tutorials</a></li><li><a href="#">Blog</a></li></ul></div>
+      <div class="footer-col"><h4>Community</h4><ul><li><a href="#">GitHub</a></li><li><a href="#">Discord</a></li><li><a href="#">Twitter / X</a></li><li><a href="#">Contributing</a></li></ul></div>
     </div>
-
     <div class="footer-bottom">
       <p>© 2024 TetherDust. Open source under the MIT License.</p>
       <a href="#" class="gh-stars">
@@ -1400,13 +1218,11 @@
 
 </div><!-- /page-wrap -->
 
-<!-- ═══════════════ SCRIPTS ═══════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ═══ THREE.JS MATRIX RAIN PARTICLE SYSTEM ═══
+// ═══ THREE.JS — FLOATING DATA NETWORK (light theme) ═══
 (function () {
   'use strict';
-
   var canvas   = document.getElementById('bg-canvas');
   var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -1414,84 +1230,120 @@
   renderer.setClearColor(0x000000, 0);
 
   var scene  = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(0, 0, 12);
+  var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+  camera.position.set(0, 0, 22);
 
-  // Lights
-  var ambient = new THREE.AmbientLight(0x00BFA5, 0.35);
-  scene.add(ambient);
-
-  var ptL1 = new THREE.PointLight(0x00BFA5, 1.4, 30);
-  ptL1.position.set(-8, 8, 4);
-  scene.add(ptL1);
-
-  var ptL2 = new THREE.PointLight(0x00897B, 1.1, 30);
-  ptL2.position.set(8, 8, 4);
-  scene.add(ptL2);
-
-  var colorBright = new THREE.Color(0x00BFA5);
-  var colorMid    = new THREE.Color(0x00897B);
-  var colorDim    = new THREE.Color(0x004D40);
+  var nodeColor  = new THREE.Color(0x2563EB);
+  var nodeColor2 = new THREE.Color(0x06B6D4);
+  var lineColor  = new THREE.Color(0x93C5FD);
 
   function rand(a, b) { return Math.random() * (b - a) + a; }
 
-  var particles = [];
-  var NUM_COLS  = 200;
+  // Create node particles
+  var nodes = [];
+  var NUM_NODES = 90;
 
-  for (var c = 0; c < NUM_COLS; c++) {
-    var baseX  = rand(-8, 8);
-    var count  = Math.floor(rand(5, 11));
+  for (var i = 0; i < NUM_NODES; i++) {
+    var r  = i < 20 ? 0.12 : 0.07;
+    var geo = new THREE.SphereGeometry(r, 8, 8);
+    var col = Math.random() < 0.4 ? nodeColor.clone() : nodeColor2.clone();
+    var mat = new THREE.MeshBasicMaterial({
+      color: col,
+      transparent: true,
+      opacity: rand(0.25, 0.55)
+    });
+    var mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(rand(-14, 14), rand(-10, 10), rand(-6, 2));
+    mesh.userData = {
+      vx: rand(-0.003, 0.003),
+      vy: rand(-0.002, 0.002),
+      vz: rand(-0.001, 0.001),
+      phase: rand(0, Math.PI * 2)
+    };
+    scene.add(mesh);
+    nodes.push(mesh);
+  }
 
-    for (var i = 0; i < count; i++) {
-      var isLeader = (i === 0) && (Math.random() < 0.4);
-      var r        = isLeader ? rand(0.05, 0.08) : 0.03;
-      var geo      = new THREE.SphereGeometry(r, 5, 5);
+  // Create connection lines between nearby nodes
+  var lineMat = new THREE.LineBasicMaterial({
+    color: lineColor,
+    transparent: true,
+    opacity: 0.12
+  });
 
-      var t   = i / count;
-      var col = t < 0.3 ? colorBright.clone() : t < 0.65 ? colorMid.clone() : colorDim.clone();
+  var lineObjects = [];
+  var CONN_DIST = 5.5;
 
-      var mat = new THREE.MeshStandardMaterial({
-        color:            col,
-        emissive:         col,
-        emissiveIntensity: isLeader ? 0.9 : 0.4,
-        transparent:      true,
-        opacity:          isLeader ? 1.0 : rand(0.5, 0.9),
-      });
-
-      var mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(baseX, rand(-8, 8), rand(-2, 2));
-
-      mesh.userData = {
-        baseX:    baseX,
-        speed:    rand(0.008, 0.025),
-        drift:    rand(0.3, 1.5),
-        driftAmp: rand(0.04, 0.12),
-        phase:    rand(0, Math.PI * 2),
-      };
-
-      scene.add(mesh);
-      particles.push(mesh);
+  function buildLines() {
+    lineObjects.forEach(function(l) { scene.remove(l); });
+    lineObjects = [];
+    for (var a = 0; a < nodes.length; a++) {
+      for (var b = a + 1; b < nodes.length; b++) {
+        var d = nodes[a].position.distanceTo(nodes[b].position);
+        if (d < CONN_DIST) {
+          var pts  = [nodes[a].position.clone(), nodes[b].position.clone()];
+          var geo2 = new THREE.BufferGeometry().setFromPoints(pts);
+          var line = new THREE.Line(geo2, lineMat.clone());
+          line.material.opacity = 0.12 * (1 - d / CONN_DIST);
+          scene.add(line);
+          lineObjects.push({ line: line, a: a, b: b });
+        }
+      }
     }
   }
 
-  var clock = new THREE.Clock();
+  buildLines();
+
+  var clock    = new THREE.Clock();
+  var mouse    = { x: 0, y: 0 };
+  var target   = { x: 0, y: 0 };
+
+  window.addEventListener('mousemove', function(e) {
+    mouse.x = (e.clientX / window.innerWidth  - 0.5) * 0.8;
+    mouse.y = (e.clientY / window.innerHeight - 0.5) * 0.8;
+  });
+
+  var rebuildTimer = 0;
 
   function animate() {
     requestAnimationFrame(animate);
-    var t = clock.getElapsedTime();
+    var t  = clock.getElapsedTime();
+    var dt = clock.getDelta ? 0.016 : 0.016;
 
-    for (var i = 0; i < particles.length; i++) {
-      var p  = particles[i];
-      var ud = p.userData;
+    // Mouse parallax on camera
+    target.x += (mouse.x - target.x) * 0.03;
+    target.y += (mouse.y - target.y) * 0.03;
+    camera.position.x = target.x * 1.5;
+    camera.position.y = -target.y * 1.5;
 
-      p.position.y -= ud.speed;
-      p.position.x  = ud.baseX + Math.sin(t * ud.drift + ud.phase) * ud.driftAmp;
+    // Drift nodes
+    nodes.forEach(function(n) {
+      var ud = n.userData;
+      n.position.x += ud.vx + Math.sin(t * 0.3 + ud.phase) * 0.0008;
+      n.position.y += ud.vy + Math.cos(t * 0.25 + ud.phase) * 0.0006;
+      n.position.z += ud.vz;
 
-      if (p.position.y < -8) {
-        p.position.y = 8;
-        p.position.z = rand(-2, 2);
-        ud.phase     = rand(0, Math.PI * 2);
-      }
+      // Bounce
+      if (n.position.x >  15 || n.position.x < -15) ud.vx *= -1;
+      if (n.position.y >  11 || n.position.y < -11) ud.vy *= -1;
+      if (n.position.z >   3 || n.position.z <  -7) ud.vz *= -1;
+    });
+
+    // Update line positions
+    rebuildTimer++;
+    if (rebuildTimer > 12) {
+      rebuildTimer = 0;
+      lineObjects.forEach(function(lo) {
+        var pos = lo.line.geometry.attributes.position;
+        if (!pos) return;
+        var na = nodes[lo.a].position;
+        var nb = nodes[lo.b].position;
+        pos.setXYZ(0, na.x, na.y, na.z);
+        pos.setXYZ(1, nb.x, nb.y, nb.z);
+        pos.needsUpdate = true;
+        var d = na.distanceTo(nb);
+        lo.line.material.opacity = d < CONN_DIST ? 0.14 * (1 - d / CONN_DIST) : 0;
+      });
     }
 
     renderer.render(scene, camera);
@@ -1508,27 +1360,22 @@
 
 // ═══ DEMO TABS ═══
 function switchTab(btn, paneId) {
-  document.querySelectorAll('.demo-tab').forEach(function (t) { t.classList.remove('active'); });
-  document.querySelectorAll('.demo-pane').forEach(function (p) { p.classList.remove('active'); });
+  document.querySelectorAll('.demo-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.demo-pane').forEach(function(p) { p.classList.remove('active'); });
   btn.classList.add('active');
   document.getElementById(paneId).classList.add('active');
 }
 
-// ═══ MINI CSS BAR CHART ═══
+// ═══ BAR CHART ═══
 (function buildChart() {
   var data = [
-    { label: 'Jan', val: 24.7 },
-    { label: 'Feb', val: 28.4 },
-    { label: 'Mar', val: 33.8 },
-    { label: 'Apr', val: 37.1 },
-    { label: 'May', val: 41.5 },
-    { label: 'Jun', val: 49.0 },
+    { label: 'Jan', val: 24.7 }, { label: 'Feb', val: 28.4 },
+    { label: 'Mar', val: 33.8 }, { label: 'Apr', val: 37.1 },
+    { label: 'May', val: 41.5 }, { label: 'Jun', val: 49.0 },
   ];
-
-  var maxVal = Math.max.apply(null, data.map(function (d) { return d.val; }));
+  var maxVal = Math.max.apply(null, data.map(function(d) { return d.val; }));
   var wrap   = document.getElementById('demo-bar-chart');
-
-  data.forEach(function (d, i) {
+  data.forEach(function(d, i) {
     var pct = (d.val / maxVal) * 100;
     var col = document.createElement('div');
     col.className = 'bc';
@@ -1540,43 +1387,28 @@ function switchTab(btn, paneId) {
   });
 }());
 
-// ═══ ANIMATED COUNTERS ═══
+// ═══ COUNTERS ═══
 (function initCounters() {
-  var els = document.querySelectorAll('.counter-num');
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
+  var els      = document.querySelectorAll('.stat-num');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
       if (!entry.isIntersecting) return;
-      var el      = entry.target;
-      var target  = parseInt(el.dataset.target, 10);
-      var suffix  = el.dataset.suffix || '';
-      var dur     = 1800;
-      var step    = 16;
-      var steps   = dur / step;
-      var current = 0;
-
-      if (target === 0) {
-        el.textContent = '$0' + suffix;
-        observer.unobserve(el);
-        return;
-      }
-
-      var timer = setInterval(function () {
+      var el     = entry.target;
+      var target = parseInt(el.dataset.target, 10);
+      var suffix = el.dataset.suffix || '';
+      if (target === 0) { el.textContent = '$0' + suffix; observer.unobserve(el); return; }
+      var dur = 1800, step = 16, steps = dur / step, current = 0;
+      var timer = setInterval(function() {
         current += target / steps;
-        if (current >= target) {
-          current = target;
-          clearInterval(timer);
-        }
+        if (current >= target) { current = target; clearInterval(timer); }
         el.textContent = Math.round(current).toLocaleString() + suffix;
       }, step);
-
       observer.unobserve(el);
     });
   }, { threshold: 0.4 });
-
-  els.forEach(function (el) { observer.observe(el); });
+  els.forEach(function(el) { observer.observe(el); });
 }());
 </script>
 
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
